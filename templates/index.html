@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Cumberbatch</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="description" content=""/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script src="https://kit.fontawesome.com/d1a18b3af0.js" crossorigin="anonymous"></script>
+    {#    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>#}
+    <link rel="icon" href="img/favicon.png">
+    <meta name="theme-color" content="">
+</head>
+<body class="">
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="section">
+            {% for message in messages %}
+                <div class="notification is-success">
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+<div class="section">
+    <div class="hero columns">
+        <div class="hero-body has-text-centered level">
+            <p class="column is-two-thirds is-inline-block level-right">
+                <span class="is-size-1 level-item">{{ first }} {{ last }}</span>
+            </p>
+            <div class="column is-inline-block level-right">
+                {% macro vote_form(score, icon) %}
+                    <form action="{{ url_for('vote') }}" class="is-inline-block level-item" method="post">
+                        <input type="hidden" value="{{ score }}" name="score">
+                        <input type="hidden" value="{{ first }}" name="first">
+                        <input type="hidden" value="{{ last }}" name="last">
+                        <button type="submit" class="button is-primary"><i class="fas {{ icon }}"></i></button>
+                    </form>
+                {% endmacro %}
+
+                {{ vote_form(1, 'fa-thumbs-up') }}
+                {{ vote_form(-1, 'fa-thumbs-down') }}
+                {{ vote_form(0, 'fa-forward') }}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

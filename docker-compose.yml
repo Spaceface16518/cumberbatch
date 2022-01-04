@@ -1,0 +1,22 @@
+version: '3'
+services:
+  server:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URI: 'postgresql://cumberbatch:secret@db/cumberbatch'
+      SECRET_KEY: 'secret'
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: "cumberbatch"
+      POSTGRES_PASSWORD: "secret"
+    volumes:
+      - cumberbatch-db:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "cumberbatch" ]
+volumes:
+  cumberbatch-db:
