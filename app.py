@@ -1,4 +1,4 @@
-import os
+import datetime
 import random
 
 from flask import flash, Flask, redirect, render_template, \
@@ -23,6 +23,8 @@ class Entry(db.Model):
     first = db.Column(db.String(30), nullable=False)
     last = db.Column(db.String(30), nullable=False)
     liked = db.Column(db.Boolean, nullable=False)
+    created = db.Column(db.DateTime, nullable=False,
+                        default=datetime.datetime.now())
 
     def __repr__(self):
         return f'{self.first.title()} {self.last.title()}'
@@ -41,13 +43,22 @@ def landing():
 @app.route('/vote', methods=['POST'])
 def vote():
     score = int(request.form['score'])
+    was_liked = score > 0
+    first = request.form['first']
+    last = request.form['last']
     if score != 0:
-        entry = Entry(first=request.form['first'], last=request.form['last'],
-                      liked=score > 0)
+        entry = Entry(first=first, last=last,
+                      liked=was_liked)
         db.session.add(entry)
         db.session.commit()
-        flash('Vote counted', category='success')
+        flash(f'You {"liked" if was_liked else "disliked"} "{first} {last}"')
     return redirect(url_for('landing'))
+
+
+@app.route('/liked')
+def liked():
+    entries = Entry.query.order_by(Entry.created).limit(10).all()
+    return render_template('liked.html', entries=entries)
 
 
 if __name__ == '__main__':

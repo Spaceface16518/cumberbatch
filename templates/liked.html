@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class="section">
+        <h1>Recently Liked</h1>
+        {% if entries %}
+            <ul>
+                {% for entry in entries %}
+                    <li>{{ entry.first }} {{ entry.last }}</li>
+                {% endfor %}
+
+            </ul>
+        {% else %}
+            <p>None found</p>
+        {% endif %}
+    </section>
+{% endblock %}
