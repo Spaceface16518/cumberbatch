@@ -10,7 +10,7 @@ import words
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
-app.config['SQLALCHEMY_DATABASE_URI'] = app.config['DATABASE_URL']
+app.config['SQLALCHEMY_DATABASE_URI'] = app.config['DATABASE_URI']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
