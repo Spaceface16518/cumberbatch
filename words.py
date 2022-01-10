@@ -1,3 +1,4 @@
+import os
 from typing import List
 
 import nltk
@@ -5,7 +6,8 @@ from nltk.corpus import words as all_english_words
 from nltk.tokenize import SyllableTokenizer
 
 # make sure nltk data is downloaded before trying to access the corpus
-nltk.download('words')
+if os.getenv('DOWNLOAD_NLTK_DATA') is not None:
+    nltk.download('words')
 
 corpus = all_english_words
 
