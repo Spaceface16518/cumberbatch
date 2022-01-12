@@ -52,7 +52,7 @@ def vote():
         db.session.add(entry)
         db.session.commit()
         flash(f'You {"liked" if was_liked else "disliked"} "{first} {last}"')
-    return redirect(url_for('landing'))
+    return redirect(url_for('landing'), code=303)
 
 
 @app.route('/liked')
