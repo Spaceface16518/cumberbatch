@@ -6,17 +6,15 @@ ENV FLASK_HOST=0.0.0.0
 ENV FLASK_ENV=production
 # ENV SECRET_KEY="development key"
 # ENV DATABASE_URI="sqlite:///:memory:"
+SHELL ["/bin/bash", "-c"]
+
+COPY . .
 
 # install dependencies
-COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-# cache required nltk data in separate build layer
-COPY words.py ./
-RUN python words.py
-
-# copy application files
-COPY . .
+# download required nltk data
+RUN cat nltk.txt | xargs python -m nltk.downloader
 
 # use a production web server
 CMD ["python", "-m", "gunicorn", "--workers=2", "--threads=4", "--worker-class=gthread", "--log-file=-", "--worker-tmp-dir", "/dev/shm", "--bind", "0.0.0.0:8000","app:app"]
